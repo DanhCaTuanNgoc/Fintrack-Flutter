@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../utils/localization.dart';
 import '../utils/languages.dart';
 import 'widget/components/custom_snackbar.dart';
+import '../providers/auth_provider.dart';
 
 // 🔀 Danh sách các màu chủ đạo có thể chọn
 const List<Color> primaryVariants = [
@@ -165,6 +166,37 @@ class _MoreState extends ConsumerState<More> {
               );
             },
           ),
+          _buildDivider(),
+          if (ref.watch(authProvider).user == null)
+            _buildSettingItem(
+              icon: Icons.login,
+              title: 'Đăng nhập với Google',
+              onTap: () async {
+                final ok = await ref.read(authProvider.notifier).signIn();
+                if (!mounted) return;
+                if (ok) {
+                  CustomSnackBar.showSuccess(context,
+                      message: 'Đăng nhập thành công');
+                } else {
+                  CustomSnackBar.showError(context,
+                      message: 'Đăng nhập thất bại');
+                }
+              },
+              trailing:
+                  const Icon(Icons.login, size: 18, color: Color(0xFF2D3142)),
+            )
+          else
+            _buildSettingItem(
+              icon: Icons.logout,
+              title: 'Đăng xuất',
+              onTap: () async {
+                await ref.read(authProvider.notifier).signOut();
+                if (!mounted) return;
+                CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+              },
+              trailing:
+                  const Icon(Icons.logout, size: 18, color: Colors.redAccent),
+            ),
         ],
       ),
     );

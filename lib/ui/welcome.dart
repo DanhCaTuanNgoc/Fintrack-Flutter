@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'home_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/auth_provider.dart';
 import '../data/models/book.dart';
 import '../data/database/database_helper.dart';
 import '../data/repositories/book_repository.dart';
@@ -662,7 +664,7 @@ class TermsPage extends StatelessWidget {
   }
 }
 
-class GetStartedPage extends StatelessWidget {
+class GetStartedPage extends ConsumerWidget {
   final VoidCallback onGetStarted;
   final VoidCallback onBack;
 
@@ -673,7 +675,7 @@ class GetStartedPage extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -745,58 +747,102 @@ class GetStartedPage extends StatelessWidget {
               ),
               const Spacer(),
               // Buttons
-              Row(
+              Column(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      height: 50.h,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xFF6C63FF),
-                            const Color(0xFF6C63FF).withOpacity(0.8)
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50.h,
+                    child: OutlinedButton.icon(
+                      onPressed: () async {
+                        final ok =
+                            await ref.read(authProvider.notifier).signIn();
+                        if (ok && context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const HomePage(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                    opacity: animation, child: child);
+                              },
+                              transitionDuration:
+                                  const Duration(milliseconds: 400),
+                            ),
+                          );
+                        }
+                      },
+                      style: OutlinedButton.styleFrom(
+                        side: BorderSide(color: Colors.grey.shade300),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.r)),
+                        backgroundColor: Colors.white,
+                      ),
+                      icon: Image.asset('assets/images/google_logo.png',
+                          width: 18.w,
+                          height: 18.w,
+                          errorBuilder: (c, e, s) =>
+                              Icon(Icons.login, size: 18.w)),
+                      label: Text(
+                        'Đăng nhập với Google',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: const Color(0xFF2D3142),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Container(
+                    width: double.infinity,
+                    height: 50.h,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF6C63FF),
+                          const Color(0xFF6C63FF).withOpacity(0.8)
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(22.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6C63FF).withOpacity(0.2),
+                          blurRadius: 8.r,
+                          offset: Offset(0, 4.h),
                         ),
-                        borderRadius: BorderRadius.circular(22.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF6C63FF).withOpacity(0.2),
-                            blurRadius: 8.r,
-                            offset: Offset(0, 4.h),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: onGetStarted,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22.r),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.rocket_launch_rounded,
+                            color: Colors.white,
+                            size: 16.w,
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            'Bắt đầu',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
-                      ),
-                      child: ElevatedButton(
-                        onPressed: onGetStarted,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22.r),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.rocket_launch_rounded,
-                              color: Colors.white,
-                              size: 16.w,
-                            ),
-                            SizedBox(width: 6.w),
-                            Text(
-                              'Bắt đầu',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                     ),
                   ),
@@ -997,7 +1043,8 @@ class _CreateBookPageState extends State<CreateBookPage> {
                                 ),
                                 child: Icon(
                                   Icons.edit_note,
-                                  color: const Color.fromARGB(255, 255, 255, 255),
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
                                   size: 16.w,
                                 ),
                               ),

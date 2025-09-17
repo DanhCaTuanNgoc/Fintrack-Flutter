@@ -9,3 +9,4 @@ export 'more/transaction_provider.dart';
 export './wallet_provider.dart';
 export 'more/notifications_provider.dart';
 export 'more/periodic_invoice_provider.dart';
+export './auth_provider.dart';

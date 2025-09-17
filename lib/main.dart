@@ -13,6 +13,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'utils/localization.dart';
+import 'providers/auth_provider.dart';
 import 'dart:io';
 
 import 'services/background_service.dart';
@@ -74,10 +75,19 @@ void main() async {
 class MyApp extends ConsumerWidget {
   final bool hasVisited;
   const MyApp({super.key, required this.hasVisited});
+  static bool _authInitialized = false;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLocale = ref.watch(localeObjectProvider);
+    final authState = ref.watch(authProvider);
+
+    if (!_authInitialized) {
+      _authInitialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(authProvider.notifier).loadSession();
+      });
+    }
 
     return ScreenUtilInit(
       designSize: const Size(410, 840), // Samsung A30 design size
@@ -86,7 +96,8 @@ class MyApp extends ConsumerWidget {
       builder: (context, child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
-              textScaler: const TextScaler.linear(1.0)), // Font chữ của thiết bị không ảnh hưởng đến ứng dụng
+              textScaler: const TextScaler.linear(
+                  1.0)), // Font chữ của thiết bị không ảnh hưởng đến ứng dụng
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Fintrack',
@@ -105,7 +116,11 @@ class MyApp extends ConsumerWidget {
               textTheme: GoogleFonts.robotoTextTheme(),
               scaffoldBackgroundColor: const Color(0xFFF5F5F5),
             ),
-            home: hasVisited ? const HomePage() : const WelcomeScreen(),
+            home: hasVisited
+                ? (authState.user != null
+                    ? const HomePage()
+                    : const WelcomeScreen())
+                : const WelcomeScreen(),
           ),
         );
       },

@@ -50,6 +50,7 @@ dependencies:
   fl_chart: ^0.65.0
   flutter_native_splash: ^2.4.1
   flutter_screenutil: ^5.8.4
+  google_sign_in: ^6.2.1
 
   collection: any
 dev_dependencies:

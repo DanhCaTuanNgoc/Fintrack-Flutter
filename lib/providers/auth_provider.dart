@@ -37,6 +37,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         state = state.copyWith(isLoading: false, user: null);
       }
     } catch (e) {
+      print('Load session error: $e');
       state = state.copyWith(isLoading: false, error: e);
     }
   }
@@ -48,6 +49,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: false, user: acc);
       return acc != null;
     } catch (e) {
+      print('Sign in error: $e');
       state = state.copyWith(isLoading: false, error: e);
       return false;
     }
@@ -59,6 +61,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await _authService.signOut();
       state = state.copyWith(isLoading: false, user: null);
     } catch (e) {
+      print('Sign out error: $e');
       state = state.copyWith(isLoading: false, error: e);
     }
   }

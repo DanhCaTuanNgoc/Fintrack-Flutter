@@ -167,36 +167,65 @@ class _MoreState extends ConsumerState<More> {
             },
           ),
           _buildDivider(),
-          if (ref.watch(authProvider).user == null)
-            _buildSettingItem(
-              icon: Icons.login,
-              title: 'Đăng nhập với Google',
-              onTap: () async {
-                final ok = await ref.read(authProvider.notifier).signIn();
-                if (!mounted) return;
-                if (ok) {
-                  CustomSnackBar.showSuccess(context,
-                      message: 'Đăng nhập thành công');
-                } else {
-                  CustomSnackBar.showError(context,
-                      message: 'Đăng nhập thất bại');
-                }
-              },
-              trailing:
-                  const Icon(Icons.login, size: 18, color: Color(0xFF2D3142)),
-            )
-          else
-            _buildSettingItem(
-              icon: Icons.logout,
-              title: 'Đăng xuất',
-              onTap: () async {
-                await ref.read(authProvider.notifier).signOut();
-                if (!mounted) return;
-                CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
-              },
-              trailing:
-                  const Icon(Icons.logout, size: 18, color: Colors.redAccent),
-            ),
+          Consumer(
+            builder: (context, ref, child) {
+              final authState = ref.watch(authProvider);
+              
+              if (authState.user == null) {
+                return _buildSettingItem(
+                  icon: Icons.login,
+                  title: 'Đăng nhập với Google',
+                  onTap: authState.isLoading ? null : () async {
+                    final ok = await ref.read(authProvider.notifier).signIn();
+                    if (!mounted) return;
+                    if (ok) {
+                      CustomSnackBar.showSuccess(context,
+                          message: 'Đăng nhập thành công');
+                    } else {
+                      final error = ref.read(authProvider).error;
+                      CustomSnackBar.showError(context,
+                          message: 'Đăng nhập thất bại: ${error?.toString() ?? 'Unknown error'}');
+                    }
+                  },
+                  trailing: authState.isLoading
+                      ? SizedBox(
+                          width: 18.w,
+                          height: 18.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              const Color(0xFF2D3142),
+                            ),
+                          ),
+                        )
+                      : const Icon(Icons.login, size: 18, color: Color(0xFF2D3142)),
+                );
+              } else {
+                return _buildSettingItem(
+                  icon: Icons.logout,
+                  title: 'Đăng xuất',
+                  subtitle: 'Đã đăng nhập: ${authState.user?.email ?? ''}',
+                  onTap: authState.isLoading ? null : () async {
+                    await ref.read(authProvider.notifier).signOut();
+                    if (!mounted) return;
+                    CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+                  },
+                  trailing: authState.isLoading
+                      ? SizedBox(
+                          width: 18.w,
+                          height: 18.w,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.redAccent,
+                            ),
+                          ),
+                        )
+                      : const Icon(Icons.logout, size: 18, color: Colors.redAccent),
+                );
+              }
+            },
+          ),
         ],
       ),
     );

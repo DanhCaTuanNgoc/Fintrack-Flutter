@@ -5,19 +5,27 @@ class AuthService {
   final GoogleSignIn _googleSignIn;
 
   AuthService({GoogleSignIn? googleSignIn})
-      : _googleSignIn =
-            googleSignIn ?? GoogleSignIn(scopes: ['email', 'profile']);
+      : _googleSignIn = googleSignIn ??
+            GoogleSignIn(
+              scopes: ['email', 'profile'],
+              clientId: '710681513375-r21j96ke33bgqvq0aijc8u9b5ml0gi8f.apps.googleusercontent.com',
+            );
 
   Future<GoogleSignInAccount?> signInWithGoogle() async {
-    final account = await _googleSignIn.signIn();
-    if (account != null) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('loggedIn', true);
-      await prefs.setString('userName', account.displayName ?? '');
-      await prefs.setString('userEmail', account.email);
-      await prefs.setString('userAvatar', account.photoUrl ?? '');
+    try {
+      final account = await _googleSignIn.signIn();
+      if (account != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('loggedIn', true);
+        await prefs.setString('userName', account.displayName ?? '');
+        await prefs.setString('userEmail', account.email);
+        await prefs.setString('userAvatar', account.photoUrl ?? '');
+      }
+      return account;
+    } catch (e) {
+      print('Google Sign-In Error: $e');
+      rethrow;
     }
-    return account;
   }
 
   Future<void> signOut() async {

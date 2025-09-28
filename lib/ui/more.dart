@@ -170,12 +170,13 @@ class _MoreState extends ConsumerState<More> {
           Consumer(
             builder: (context, ref, child) {
               final authState = ref.watch(authProvider);
-              
+
               if (authState.user == null) {
                 return _buildSettingItem(
                   icon: Icons.login,
                   title: 'Đăng nhập với Google',
-                  onTap: authState.isLoading ? null : () {
+                  onTap: () {
+                    if (authState.isLoading) return;
                     ref.read(authProvider.notifier).signIn().then((ok) {
                       if (!mounted) return;
                       if (ok) {
@@ -184,7 +185,8 @@ class _MoreState extends ConsumerState<More> {
                       } else {
                         final error = ref.read(authProvider).error;
                         CustomSnackBar.showError(context,
-                            message: 'Đăng nhập thất bại: ${error?.toString() ?? 'Unknown error'}');
+                            message:
+                                'Đăng nhập thất bại: ${error?.toString() ?? 'Unknown error'}');
                       }
                     });
                   },
@@ -199,17 +201,20 @@ class _MoreState extends ConsumerState<More> {
                             ),
                           ),
                         )
-                      : const Icon(Icons.login, size: 18, color: Color(0xFF2D3142)),
+                      : const Icon(Icons.login,
+                          size: 18, color: Color(0xFF2D3142)),
                 );
               } else {
                 return _buildSettingItem(
                   icon: Icons.logout,
                   title: 'Đăng xuất',
                   subtitle: 'Đã đăng nhập: ${authState.user?.email ?? ''}',
-                  onTap: authState.isLoading ? null : () {
+                  onTap: () {
+                    if (authState.isLoading) return;
                     ref.read(authProvider.notifier).signOut().then((_) {
                       if (!mounted) return;
-                      CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+                      CustomSnackBar.showSuccess(context,
+                          message: 'Đã đăng xuất');
                     });
                   },
                   trailing: authState.isLoading
@@ -223,7 +228,8 @@ class _MoreState extends ConsumerState<More> {
                             ),
                           ),
                         )
-                      : const Icon(Icons.logout, size: 18, color: Colors.redAccent),
+                      : const Icon(Icons.logout,
+                          size: 18, color: Colors.redAccent),
                 );
               }
             },

@@ -12,7 +12,16 @@
           "package_name": "com.example.fintrack"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "710681513375-r21j96ke33bgqvq0aijc8u9b5ml0gi8f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fintrack",
+            "certificate_hash": "ed29aa57a1195f9fc557984c042d772ca8eb718c"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAwZj2MvEmblcsb3et9AzQfTle0Ks6sSXc"

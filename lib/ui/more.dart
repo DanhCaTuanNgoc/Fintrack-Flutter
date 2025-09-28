@@ -175,17 +175,18 @@ class _MoreState extends ConsumerState<More> {
                 return _buildSettingItem(
                   icon: Icons.login,
                   title: 'Đăng nhập với Google',
-                  onTap: authState.isLoading ? null : () async {
-                    final ok = await ref.read(authProvider.notifier).signIn();
-                    if (!mounted) return;
-                    if (ok) {
-                      CustomSnackBar.showSuccess(context,
-                          message: 'Đăng nhập thành công');
-                    } else {
-                      final error = ref.read(authProvider).error;
-                      CustomSnackBar.showError(context,
-                          message: 'Đăng nhập thất bại: ${error?.toString() ?? 'Unknown error'}');
-                    }
+                  onTap: authState.isLoading ? null : () {
+                    ref.read(authProvider.notifier).signIn().then((ok) {
+                      if (!mounted) return;
+                      if (ok) {
+                        CustomSnackBar.showSuccess(context,
+                            message: 'Đăng nhập thành công');
+                      } else {
+                        final error = ref.read(authProvider).error;
+                        CustomSnackBar.showError(context,
+                            message: 'Đăng nhập thất bại: ${error?.toString() ?? 'Unknown error'}');
+                      }
+                    });
                   },
                   trailing: authState.isLoading
                       ? SizedBox(
@@ -205,10 +206,11 @@ class _MoreState extends ConsumerState<More> {
                   icon: Icons.logout,
                   title: 'Đăng xuất',
                   subtitle: 'Đã đăng nhập: ${authState.user?.email ?? ''}',
-                  onTap: authState.isLoading ? null : () async {
-                    await ref.read(authProvider.notifier).signOut();
-                    if (!mounted) return;
-                    CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+                  onTap: authState.isLoading ? null : () {
+                    ref.read(authProvider.notifier).signOut().then((_) {
+                      if (!mounted) return;
+                      CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+                    });
                   },
                   trailing: authState.isLoading
                       ? SizedBox(

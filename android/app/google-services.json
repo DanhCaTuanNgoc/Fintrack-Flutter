@@ -14,12 +14,24 @@
       },
       "oauth_client": [
         {
+          "client_id": "710681513375-k7h2islfq55doj1mfulrtdo9fhkour81.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fintrack",
+            "certificate_hash": "14294e301d37b358880e5b56c701c55a7a36a511"
+          }
+        },
+        {
           "client_id": "710681513375-r21j96ke33bgqvq0aijc8u9b5ml0gi8f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.fintrack",
             "certificate_hash": "ed29aa57a1195f9fc557984c042d772ca8eb718c"
           }
+        },
+        {
+          "client_id": "710681513375-uvojfuvdke0d82sqvo43fvtn3i6ejrud.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -29,7 +41,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710681513375-uvojfuvdke0d82sqvo43fvtn3i6ejrud.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

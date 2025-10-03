@@ -31,7 +31,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final logged = await _authService.isLoggedIn();
       if (logged) {
         // Try silent sign-in to restore account
-        final GoogleSignInAccount? acc = await GoogleSignIn().signInSilently();
+        final GoogleSignInAccount? acc = await _authService.silentSignIn();
         state = state.copyWith(isLoading: false, user: acc);
       } else {
         state = state.copyWith(isLoading: false, user: null);

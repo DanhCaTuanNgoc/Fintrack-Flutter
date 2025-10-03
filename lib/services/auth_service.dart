@@ -8,7 +8,6 @@ class AuthService {
       : _googleSignIn = googleSignIn ??
             GoogleSignIn(
               scopes: ['email', 'profile'],
-              clientId: '710681513375-r21j96ke33bgqvq0aijc8u9b5ml0gi8f.apps.googleusercontent.com',
             );
 
   Future<GoogleSignInAccount?> signInWithGoogle() async {
@@ -40,5 +39,14 @@ class AuthService {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool('loggedIn') ?? false;
+  }
+
+  Future<GoogleSignInAccount?> silentSignIn() async {
+    try {
+      return await _googleSignIn.signInSilently();
+    } catch (e) {
+      print('Google Silent Sign-In Error: $e');
+      return null;
+    }
   }
 }

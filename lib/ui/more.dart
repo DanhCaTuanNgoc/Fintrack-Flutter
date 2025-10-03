@@ -13,6 +13,7 @@ import '../utils/localization.dart';
 import '../utils/languages.dart';
 import 'widget/components/custom_snackbar.dart';
 import '../providers/auth_provider.dart';
+import 'welcome.dart';
 
 // 🔀 Danh sách các màu chủ đạo có thể chọn
 const List<Color> primaryVariants = [
@@ -213,8 +214,10 @@ class _MoreState extends ConsumerState<More> {
                     if (authState.isLoading) return;
                     ref.read(authProvider.notifier).signOut().then((_) {
                       if (!mounted) return;
-                      CustomSnackBar.showSuccess(context,
-                          message: 'Đã đăng xuất');
+                      // Thông báo và điều hướng về màn hình chào mừng, xóa toàn bộ stack
+                      CustomSnackBar.showSuccess(context, message: 'Đã đăng xuất');
+                      // Buộc làm mới provider để tránh giữ dữ liệu mail cũ trong UI
+                      ref.invalidate(authProvider);
                     });
                   },
                   trailing: authState.isLoading

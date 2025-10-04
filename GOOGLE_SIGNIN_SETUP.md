@@ -4,10 +4,7 @@
 
 1. Truy cập [Google Cloud Console](https://console.cloud.google.com/)
 2. Tạo project mới hoặc chọn project hiện có
-3. Kích hoạt Google Sign-In API:
-   - Vào "APIs & Services" > "Library"
-   - Tìm "Google Sign-In API" và kích hoạt
-4. Tạo OAuth 2.0 Client IDs:
+3. Tạo OAuth 2.0 Client IDs:
    - Vào "APIs & Services" > "Credentials"
    - Click "Create Credentials" > "OAuth 2.0 Client ID"
    - Chọn "Android" và nhập thông tin:
@@ -37,10 +34,6 @@ keytool -list -v -keystore your-release-key.keystore -alias your-key-alias
    - Mở `android/app/src/main/res/values/strings.xml`
    - Thay `YOUR_WEB_CLIENT_ID` bằng Web Client ID từ Google Console
 
-3. **Cập nhật AuthService:**
-   - Mở `lib/services/auth_service.dart`
-   - Uncomment và thay `YOUR_CLIENT_ID` bằng Android Client ID
-
 ## Bước 4: Cấu hình iOS (nếu cần)
 
 1. **Thêm URL Scheme:**
@@ -57,13 +50,6 @@ keytool -list -v -keystore your-release-key.keystore -alias your-key-alias
 1. Chạy ứng dụng: `flutter run`
 2. Vào Settings > Đăng nhập với Google
 3. Kiểm tra xem đăng nhập có hoạt động không
-
-## Lưu ý quan trọng
-
-- **Package name** phải khớp với `applicationId` trong `android/app/build.gradle.kts`
-- **SHA-1 fingerprint** phải chính xác
-- **Client IDs** phải được cấu hình đúng cho từng platform
-- Đảm bảo Google Sign-In API đã được kích hoạt
 
 ## Troubleshooting
 

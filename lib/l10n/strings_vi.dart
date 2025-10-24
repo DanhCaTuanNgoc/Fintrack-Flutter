@@ -182,6 +182,8 @@ class VietnameseStrings {
   static const String addTransaction = 'Thêm giao dịch';
   static const String editTransaction = 'Chỉnh sửa giao dịch';
   static const String selectCategory = 'Chọn danh mục';
+  static const String camera = 'Máy ảnh';
+  static const String gallery = 'Thư viện';
   static const String selectExpenseCategory = 'Chọn danh mục chi tiêu';
   static const String selectIncomeCategory = 'Chọn danh mục thu nhập';
   static const String chooseCategory = 'Chọn danh mục';

@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../../data/models/models_barrel.dart';
 import '../../../providers/providers_barrel.dart';
 import '../../../utils/localization.dart';
@@ -38,11 +40,51 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
   String? _selectedCategory;
   String? _noteError;
   String? _amountError;
+  File? _imageFile;
 
   @override
   void initState() {
     super.initState();
     _isExpense = widget.initialIsExpense;
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
+  void _showImagePickerOptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: Text(AppLocalizations.of(context).gallery),
+                onTap: () {
+                  _pickImage(ImageSource.gallery);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: Text(AppLocalizations.of(context).camera),
+                onTap: () {
+                  _pickImage(ImageSource.camera);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -72,12 +114,14 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                 borderRadius: BorderRadius.circular(2.r),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         l10n.addTransaction,
@@ -317,6 +361,32 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                             ),
                     ),
                   ),
+                  SizedBox(height: 16.h),
+                  if (_imageFile != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Image.file(
+                        _imageFile!,
+                        height: 150.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  SizedBox(height: 16.h),
+                  OutlinedButton.icon(
+                    onPressed: _showImagePickerOptions,
+                    icon: Icon(Icons.attach_file, color: widget.themeColor),
+                    label: Text(
+                      'Thêm ảnh',
+                      style: TextStyle(color: widget.themeColor),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: widget.themeColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 24.h),
                   SizedBox(
                     width: double.infinity,
@@ -364,6 +434,7 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                             categoryId: categoryId,
                             bookId: widget.currentBook.id ?? 0,
                             userId: 1,
+                            imagePath: _imageFile?.path,
                           );
 
                           setState(() {
@@ -372,6 +443,7 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                             _selectedCategory = null;
                             _noteError = null;
                             _amountError = null;
+                            _imageFile = null;
                           });
 
                           if (!mounted) return;
@@ -415,9 +487,11 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                 ],
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    );
+      ],
+    ),
+        ),
+      );
   }
 }

@@ -7,6 +7,7 @@ class Transaction {
   final int? categoryId;
   final int bookId;
   final int userId;
+  final String? imagePath;
 
   Transaction({
     this.id,
@@ -17,6 +18,7 @@ class Transaction {
     required this.categoryId,
     required this.bookId,
     required this.userId,
+    this.imagePath,
   }) : date = date ?? DateTime.now();
 
   Transaction copyWith({
@@ -28,6 +30,7 @@ class Transaction {
     int? categoryId,
     int? bookId,
     int? userId,
+    String? imagePath,
   }) {
     return Transaction(
       id: id ?? this.id,
@@ -38,6 +41,7 @@ class Transaction {
       categoryId: categoryId ?? this.categoryId,
       bookId: bookId ?? this.bookId,
       userId: userId ?? this.userId,
+      imagePath: imagePath ?? this.imagePath,
     );
   }
 
@@ -51,6 +55,7 @@ class Transaction {
       'category_id': categoryId,
       'book_id': bookId,
       'user_id': userId,
+      'image_path': imagePath,
     };
   }
 
@@ -64,6 +69,7 @@ class Transaction {
       categoryId: map['category_id'],
       bookId: map['book_id'],
       userId: map['user_id'],
+      imagePath: map['image_path'],
     );
   }
 }

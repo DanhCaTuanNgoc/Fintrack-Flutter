@@ -180,6 +180,8 @@ class EnglishStrings {
   static const String addTransaction = 'Add Transaction';
   static const String editTransaction = 'Edit Transaction';
   static const String selectCategory = 'Select Category';
+  static const String camera = 'Camera';
+  static const String gallery = 'Gallery';
   static const String selectExpenseCategory = 'Select Expense Category';
   static const String selectIncomeCategory = 'Select Income Category';
   static const String chooseCategory = 'Choose Category';

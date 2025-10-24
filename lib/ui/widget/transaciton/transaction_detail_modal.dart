@@ -1,4 +1,5 @@
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -137,6 +138,22 @@ class TransactionDetailModal extends ConsumerWidget {
                       child: Text(
                         transaction.note,
                         style: TextStyle(fontSize: 16.sp),
+                      ),
+                    ),
+                  ],
+                  SizedBox(height: 24.h),
+
+                  // Image
+                  if (transaction.imagePath != null &&
+                      transaction.imagePath!.isNotEmpty) ...[
+                    SizedBox(height: 16.h),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Image.file(
+                        File(transaction.imagePath!),
+                        height: 150.h,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ],

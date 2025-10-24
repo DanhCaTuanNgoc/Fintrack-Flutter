@@ -121,6 +121,8 @@ class AppLocalizations {
   String get category => _getString('category');
   String get chooseCategory => _getString('chooseCategory');
   String get addTransaction => _getString('addTransaction');
+  String get camera => _getString('camera');
+  String get gallery => _getString('gallery');
   String get createFlexibleSavingsGoal =>
       _getString('createFlexibleSavingsGoal');
   String get createPeriodicSavingsGoal =>
@@ -433,6 +435,8 @@ class AppLocalizations {
       'category': 'Danh mục',
       'chooseCategory': 'Chọn danh mục',
       'addTransaction': 'Thêm giao dịch',
+      'camera': 'Máy ảnh',
+      'gallery': 'Thư viện',
       'createFlexibleSavingsGoal': 'Tạo sổ tiết kiệm linh hoạt',
       'createPeriodicSavingsGoal': 'Tạo sổ tiết kiệm định kỳ',
       'targetAmount': 'Số tiền mục tiêu',
@@ -658,6 +662,8 @@ class AppLocalizations {
       'category': 'Category',
       'chooseCategory': 'Choose Category',
       'addTransaction': 'Add Transaction',
+      'camera': 'Camera',
+      'gallery': 'Gallery',
       'createFlexibleSavingsGoal': 'Create Flexible Savings Goal',
       'createPeriodicSavingsGoal': 'Create Periodic Savings Goal',
       'targetAmount': 'Target Amount',

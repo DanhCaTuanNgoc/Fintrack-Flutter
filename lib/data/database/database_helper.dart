@@ -21,7 +21,7 @@ class DatabaseHelper {
     final appDocDir = await getApplicationDocumentsDirectory();
     final path = join(appDocDir.path, filePath);
     return await openDatabase(path,
-        version: 2, onCreate: _createDB, onUpgrade: _upgradeDB);
+        version: 3, onCreate: _createDB, onUpgrade: _upgradeDB);
   }
 
   Future<void> _createDB(Database db, int version) async {
@@ -81,6 +81,7 @@ class DatabaseHelper {
         category_id INTEGER,
         book_id INTEGER,
         user_id INTEGER,
+        image_path TEXT,
         FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE SET NULL,
         FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -190,6 +191,9 @@ class DatabaseHelper {
           remaining_days INTEGER
         )
       ''');
+    }
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE transactions ADD COLUMN image_path TEXT');
     }
   }
 

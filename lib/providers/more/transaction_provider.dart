@@ -41,6 +41,7 @@ class TransactionsNotifier
     int? categoryId, // Changed from required to optional
     required int bookId,
     required int userId,
+    String? imagePath,
   }) async {
     try {
       final repository = ref.read(transactionRepositoryProvider);
@@ -52,6 +53,7 @@ class TransactionsNotifier
         bookId: bookId,
         userId: userId,
         date: DateTime.now(),
+        imagePath: imagePath,
       );
       await repository.createTransaction(transaction);
       await loadTransactions();

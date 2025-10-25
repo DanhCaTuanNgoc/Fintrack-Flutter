@@ -60,27 +60,73 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
   void _showImagePickerOptions() {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors.transparent,
       builder: (context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: Text(AppLocalizations.of(context).gallery),
-                onTap: () {
-                  _pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: Text(AppLocalizations.of(context).camera),
-                onTap: () {
-                  _pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+        return Container(
+          height: 200.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+          ),
+          child: SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  width: 40.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(top: 12.h, bottom: 20.h),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.photo_library,
+                    color: widget.themeColor,
+                    size: 24.sp,
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).gallery,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF2D3142),
+                    ),
+                  ),
+                  onTap: () {
+                    _pickImage(ImageSource.gallery);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Divider(
+                  height: 1.h,
+                  color: Colors.grey[200],
+                  indent: 16.w,
+                  endIndent: 16.w,
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.photo_camera,
+                    color: widget.themeColor,
+                    size: 24.sp,
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context).camera,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF2D3142),
+                    ),
+                  ),
+                  onTap: () {
+                    _pickImage(ImageSource.camera);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                SizedBox(height: 16.h),
+              ],
+            ),
           ),
         );
       },
@@ -98,17 +144,17 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
+        height: MediaQuery.of(context).size.height * 0.85,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.r)),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 40.w,
               height: 4.h,
-              margin: EdgeInsets.only(top: 12.h, bottom: 20.h),
+              margin: EdgeInsets.only(top: 12.h, bottom: 12.h),
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(2.r),
@@ -116,206 +162,58 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
             ),
             Expanded(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        l10n.addTransaction,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF2D3142),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          TypeButton(
-                            text: l10n.expense,
-                            isSelected: _isExpense,
-                            onTap: () {
-                              setState(() {
-                                _isExpense = true;
-                                _selectedCategory = null;
-                              });
-                            },
-                            themeColor: widget.themeColor,
-                          ),
-                          SizedBox(width: 8.w),
-                          TypeButton(
-                            text: l10n.income,
-                            isSelected: !_isExpense,
-                            onTap: () {
-                              setState(() {
-                                _isExpense = false;
-                                _selectedCategory = null;
-                              });
-                            },
-                            themeColor: widget.themeColor,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 18.h),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: l10n.note,
-                      labelStyle: TextStyle(color: widget.themeColor),
-                      prefixIcon: Icon(
-                        Icons.note,
-                        color: widget.themeColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: BorderSide(
-                          color: widget.themeColor,
-                          width: 2,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                        borderSide: const BorderSide(
-                          color: Colors.red,
-                          width: 1,
-                        ),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      _note = value;
-                      // Clear error when user starts typing
-                      if (_noteError != null) {
-                        setState(() {
-                          _noteError = null;
-                        });
-                      }
-                    },
-                  ),
-                  if (_noteError != null) ...[
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(8.r),
-                        border: Border.all(
-                          color: Colors.red.shade200,
-                          width: 1,
-                        ),
-                      ),
-                      child: Text(
-                        _noteError!,
-                        style: TextStyle(
-                          color: Colors.red.shade600,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                  SizedBox(height: 16.h),
-                  Container(
-                    padding: EdgeInsets.only(top: 9.h),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    child: Column(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          _amount.isEmpty
-                              ? '0 ${currency.symbol}'
-                              : formatCurrency(double.tryParse(_amount) ?? 0, currency),
+                          l10n.addTransaction,
                           style: TextStyle(
-                            fontSize: 32.sp,
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: const Color(0xFF2D3142),
                           ),
                         ),
-                        SizedBox(height: 10.h),
-                        NumberPad(
-                          onNumberTap: (number) {
-                            setState(() {
-                              _amount += number;
-                              // Clear error when user starts typing
-                              if (_amountError != null) {
-                                _amountError = null;
-                              }
-                            });
-                          },
-                          onBackspaceTap: () {
-                            setState(() {
-                              if (_amount.isNotEmpty) {
-                                _amount =
-                                    _amount.substring(0, _amount.length - 1);
-                              }
-                              // Clear error when user starts typing
-                              if (_amountError != null) {
-                                _amountError = null;
-                              }
-                            });
-                          },
+                        Row(
+                          children: [
+                            TypeButton(
+                              text: l10n.expense,
+                              isSelected: _isExpense,
+                              onTap: () {
+                                setState(() {
+                                  _isExpense = true;
+                                  _selectedCategory = null;
+                                });
+                              },
+                              themeColor: widget.themeColor,
+                            ),
+                            SizedBox(width: 8.w),
+                            TypeButton(
+                              text: l10n.income,
+                              isSelected: !_isExpense,
+                              onTap: () {
+                                setState(() {
+                                  _isExpense = false;
+                                  _selectedCategory = null;
+                                });
+                              },
+                              themeColor: widget.themeColor,
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  if (_amountError != null) ...[
-                    SizedBox(height: 8.h),
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade50,
-                        borderRadius: BorderRadius.circular(8.r),
-                        border: Border.all(
-                          color: Colors.red.shade200,
-                          width: 1,
-                        ),
-                      ),
-                      child: Text(
-                        _amountError!,
-                        style: TextStyle(
-                          color: Colors.red.shade600,
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                  SizedBox(height: 16.h),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => CategorySelectionModal(
-                          categories: categories,
-                          selectedCategory: _selectedCategory,
-                          themeColor: widget.themeColor,
-                          isExpense: _isExpense,
-                          onCategoryTap: (category) {
-                            setState(() {
-                              _selectedCategory = category;
-                            });
-                          },
-                        ),
-                      );
-                    },
-                    child: InputDecorator(
+                    SizedBox(height: 12.h),
+                    TextField(
                       decoration: InputDecoration(
-                        labelText: l10n.category,
+                        labelText: l10n.note,
                         labelStyle: TextStyle(color: widget.themeColor),
+                        prefixIcon: Icon(
+                          Icons.note,
+                          color: widget.themeColor,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
@@ -326,172 +224,346 @@ class _AddTransactionModalState extends ConsumerState<AddTransactionModal> {
                             width: 2,
                           ),
                         ),
-                        suffixIcon: const Icon(Icons.keyboard_arrow_down),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: 1,
+                          ),
+                        ),
                       ),
-                      child: _selectedCategory == null
-                          ? Text(
-                              l10n.chooseCategory,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 16.sp,
-                              ),
-                            )
-                          : Row(
-                              children: [
-                                Text(
-                                  categories.firstWhere(
-                                    (cat) => cat['icon'] == _selectedCategory,
-                                  )['icon'],
-                                  style: TextStyle(fontSize: 20.sp),
-                                ),
-                                SizedBox(width: 8.w),
-                                Text(
-                                  CategoryHelper.getLocalizedCategoryName(
-                                    categories.firstWhere((cat) =>
-                                        cat['icon'] ==
-                                        _selectedCategory)['icon'],
-                                    l10n,
-                                  ),
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    color: const Color(0xFF2D3142),
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                  SizedBox(height: 16.h),
-                  if (_imageFile != null)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Image.file(
-                        _imageFile!,
-                        height: 150.h,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  SizedBox(height: 16.h),
-                  OutlinedButton.icon(
-                    onPressed: _showImagePickerOptions,
-                    icon: Icon(Icons.attach_file, color: widget.themeColor),
-                    label: Text(
-                      'Thêm ảnh',
-                      style: TextStyle(color: widget.themeColor),
-                    ),
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: widget.themeColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 24.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        // Validate note field
-                        if (_note.trim().isEmpty) {
+                      onChanged: (value) {
+                        _note = value;
+                        // Clear error when user starts typing
+                        if (_noteError != null) {
                           setState(() {
-                            _noteError =
-                                'Vui lòng nhập chú thích cho giao dịch';
-                          });
-                          return;
-                        }
-
-                        // Validate amount
-                        if (_amount.isEmpty) {
-                          setState(() {
-                            _amountError = 'Vui lòng nhập số tiền';
-                          });
-                          return;
-                        }
-
-                        try {
-                          final notifier =
-                              ref.read(transactionsProvider.notifier);
-
-                          // Handle category - can be null
-                          int? categoryId;
-                          if (_selectedCategory != null) {
-                            try {
-                              final selected = categories.firstWhere(
-                                (cat) => cat['icon'] == _selectedCategory,
-                              );
-                              categoryId = selected['id'];
-                            } catch (e) {
-                              // Category not found, use null
-                              categoryId = null;
-                            }
-                          }
-
-                          await notifier.createTransaction(
-                            amount: double.parse(_amount),
-                            note: _note,
-                            type: _isExpense ? 'expense' : 'income',
-                            categoryId: categoryId,
-                            bookId: widget.currentBook.id ?? 0,
-                            userId: 1,
-                            imagePath: _imageFile?.path,
-                          );
-
-                          setState(() {
-                            _amount = '';
-                            _note = '';
-                            _selectedCategory = null;
                             _noteError = null;
-                            _amountError = null;
-                            _imageFile = null;
                           });
-
-                          if (!mounted) return;
-                          Navigator.pop(context);
-
-                          // Hiển thị thông báo cho người dùng
-                          Future.delayed(
-                            const Duration(milliseconds: 100),
-                            () {
-                              if (mounted) {
-                                CustomSnackBar.showSuccess(
-                                  context,
-                                  message: AppLocalizations.of(context).success,
-                                );
-                              }
-                            },
-                          );
-                        } catch (e) {
-                          print('Error creating transaction: $e');
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: widget.themeColor,
-                        padding: EdgeInsets.symmetric(vertical: 16.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    if (_noteError != null) ...[
+                      SizedBox(height: 8.h),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 8.h,
                         ),
-                        elevation: 0,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(
+                            color: Colors.red.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          _noteError!,
+                          style: TextStyle(
+                            color: Colors.red.shade600,
+                            fontSize: 12.sp,
+                          ),
+                        ),
                       ),
-                      child: Text(
-                        l10n.add,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    ],
+                    SizedBox(height: 12.h),
+                    Container(
+                      padding: EdgeInsets.only(top: 6.h),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            _amount.isEmpty
+                                ? '0 ${currency.symbol}'
+                                : formatCurrency(
+                                    double.tryParse(_amount) ?? 0, currency),
+                            style: TextStyle(
+                              fontSize: 32.sp,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0xFF2D3142),
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+                          NumberPad(
+                            onNumberTap: (number) {
+                              setState(() {
+                                _amount += number;
+                                // Clear error when user starts typing
+                                if (_amountError != null) {
+                                  _amountError = null;
+                                }
+                              });
+                            },
+                            onBackspaceTap: () {
+                              setState(() {
+                                if (_amount.isNotEmpty) {
+                                  _amount =
+                                      _amount.substring(0, _amount.length - 1);
+                                }
+                                // Clear error when user starts typing
+                                if (_amountError != null) {
+                                  _amountError = null;
+                                }
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (_amountError != null) ...[
+                      SizedBox(height: 8.h),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 8.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade50,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: Border.all(
+                            color: Colors.red.shade200,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          _amountError!,
+                          style: TextStyle(
+                            color: Colors.red.shade600,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ),
+                    ],
+                    SizedBox(height: 16.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: GestureDetector(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.transparent,
+                                builder: (context) => CategorySelectionModal(
+                                  categories: categories,
+                                  selectedCategory: _selectedCategory,
+                                  themeColor: widget.themeColor,
+                                  isExpense: _isExpense,
+                                  onCategoryTap: (category) {
+                                    setState(() {
+                                      _selectedCategory = category;
+                                    });
+                                  },
+                                ),
+                              );
+                            },
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: l10n.category,
+                                labelStyle: TextStyle(color: widget.themeColor),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  borderSide: BorderSide(
+                                    color: widget.themeColor,
+                                    width: 2,
+                                  ),
+                                ),
+                                suffixIcon:
+                                    const Icon(Icons.keyboard_arrow_down),
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 16.h,
+                                ),
+                              ),
+                              child: _selectedCategory == null
+                                  ? Text(
+                                      l10n.chooseCategory,
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 16.sp,
+                                      ),
+                                    )
+                                  : Row(
+                                      children: [
+                                        Text(
+                                          categories.firstWhere(
+                                            (cat) =>
+                                                cat['icon'] ==
+                                                _selectedCategory,
+                                          )['icon'],
+                                          style: TextStyle(fontSize: 20.sp),
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Expanded(
+                                          child: Text(
+                                            CategoryHelper
+                                                .getLocalizedCategoryName(
+                                              categories.firstWhere((cat) =>
+                                                  cat['icon'] ==
+                                                  _selectedCategory)['icon'],
+                                              l10n,
+                                            ),
+                                            style: TextStyle(
+                                              fontSize: 16.sp,
+                                              color: const Color(0xFF2D3142),
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Expanded(
+                          flex: 1,
+                          child: OutlinedButton(
+                            onPressed: _showImagePickerOptions,
+                            style: OutlinedButton.styleFrom(
+                              side: BorderSide(color: widget.themeColor),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 16.h),
+                            ),
+                            child: Icon(
+                              Icons.attach_file,
+                              color: widget.themeColor,
+                              size: 24.sp,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_imageFile != null) ...[
+                      SizedBox(height: 20.h),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Image.file(
+                          _imageFile!,
+                          height: 150.h,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
+                    SizedBox(height: 16.h),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          // Validate note field
+                          if (_note.trim().isEmpty) {
+                            setState(() {
+                              _noteError =
+                                  'Vui lòng nhập chú thích cho giao dịch';
+                            });
+                            return;
+                          }
+
+                          // Validate amount
+                          if (_amount.isEmpty) {
+                            setState(() {
+                              _amountError = 'Vui lòng nhập số tiền';
+                            });
+                            return;
+                          }
+
+                          try {
+                            final notifier =
+                                ref.read(transactionsProvider.notifier);
+
+                            // Handle category - can be null
+                            int? categoryId;
+                            if (_selectedCategory != null) {
+                              try {
+                                final selected = categories.firstWhere(
+                                  (cat) => cat['icon'] == _selectedCategory,
+                                );
+                                categoryId = selected['id'];
+                              } catch (e) {
+                                // Category not found, use null
+                                categoryId = null;
+                              }
+                            }
+
+                            await notifier.createTransaction(
+                              amount: double.parse(_amount),
+                              note: _note,
+                              type: _isExpense ? 'expense' : 'income',
+                              categoryId: categoryId,
+                              bookId: widget.currentBook.id ?? 0,
+                              userId: 1,
+                              imagePath: _imageFile?.path,
+                            );
+
+                            setState(() {
+                              _amount = '';
+                              _note = '';
+                              _selectedCategory = null;
+                              _noteError = null;
+                              _amountError = null;
+                              _imageFile = null;
+                            });
+
+                            if (!mounted) return;
+                            Navigator.pop(context);
+
+                            // Hiển thị thông báo cho người dùng
+                            Future.delayed(
+                              const Duration(milliseconds: 100),
+                              () {
+                                if (mounted) {
+                                  CustomSnackBar.showSuccess(
+                                    context,
+                                    message:
+                                        AppLocalizations.of(context).success,
+                                  );
+                                }
+                              },
+                            );
+                          } catch (e) {
+                            print('Error creating transaction: $e');
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: widget.themeColor,
+                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Text(
+                          l10n.add,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                ],
+                    SizedBox(
+                        height: MediaQuery.of(context).viewInsets.bottom > 0
+                            ? 8.h
+                            : 24.h),
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-        ),
-      );
+      ),
+    );
   }
 }

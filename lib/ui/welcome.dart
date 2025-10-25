@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'home_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/auth_provider.dart';
 import '../data/models/book.dart';
 import '../data/database/database_helper.dart';
 import '../data/repositories/book_repository.dart';
@@ -747,108 +746,58 @@ class GetStartedPage extends ConsumerWidget {
               ),
               const Spacer(),
               // Buttons
-              Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    height: 50.h,
-                    child: OutlinedButton.icon(
-                      onPressed: () async {
-                        final ok =
-                            await ref.read(authProvider.notifier).signIn();
-                        if (ok && context.mounted) {
-                          Navigator.pushReplacement(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const HomePage(),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
-                                return FadeTransition(
-                                    opacity: animation, child: child);
-                              },
-                              transitionDuration:
-                                  const Duration(milliseconds: 400),
-                            ),
-                          );
-                        }
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.grey.shade300),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(22.r)),
-                        backgroundColor: Colors.white,
-                      ),
-                      icon: Image.asset('assets/images/google_logo.png',
-                          width: 18.w,
-                          height: 18.w,
-                          errorBuilder: (c, e, s) =>
-                              Icon(Icons.login, size: 18.w)),
-                      label: Text(
-                        'Đăng nhập với Google',
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            color: const Color(0xFF2D3142),
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
+              Container(
+                width: double.infinity,
+                height: 50.h,
+                margin: EdgeInsets.only(bottom: 30.h),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF6C63FF),
+                      const Color(0xFF6C63FF).withOpacity(0.8)
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
                   ),
-                  SizedBox(height: 12.h),
-                  Container(
-                    width: double.infinity,
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF6C63FF),
-                          const Color(0xFF6C63FF).withOpacity(0.8)
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                      ),
+                  borderRadius: BorderRadius.circular(22.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF6C63FF).withOpacity(0.2),
+                      blurRadius: 8.r,
+                      offset: Offset(0, 4.h),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton(
+                  onPressed: onGetStarted,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(22.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF6C63FF).withOpacity(0.2),
-                          blurRadius: 8.r,
-                          offset: Offset(0, 4.h),
-                        ),
-                      ],
-                    ),
-                    child: ElevatedButton(
-                      onPressed: onGetStarted,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        shadowColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.r),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.rocket_launch_rounded,
-                            color: Colors.white,
-                            size: 16.w,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            'Bắt đầu',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.rocket_launch_rounded,
+                        color: Colors.white,
+                        size: 16.w,
+                      ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        'Bắt đầu',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              SizedBox(height: 30.h),
             ],
           ),
         ),
